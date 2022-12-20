@@ -125,9 +125,31 @@ const Datea = styled.div`
     transform: translate(-50%, -50%);
     content: '';
   }
+
+  .selected {
+    position: relative;
+  }
+
+  .selected::before {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: -1;
+    display: block;
+    border: 1px solid red;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    content: '';
+  }
 `;
 
 function App() {
+  const today = new Date();
+
+  const [selected, setSelected] = useState(new Date());
+
   const [calendar, setCalendar] = useState({
     year: new Date().getFullYear(), // 2022년
     month: new Date().getMonth(), // 11월(+1해서 사용)
@@ -136,8 +158,9 @@ function App() {
       visible: false,
     },
     schedule: [],
+    asd: [],
   });
-  const { year, month } = calendar;
+  const { year, month, modal, schedule } = calendar;
 
   const prevLast = new Date(year, month, 0); //11월 마지막 일
   const thisLast = new Date(year, month + 1, 0); //12월 마지막 일
@@ -161,10 +184,8 @@ function App() {
     nextDates.push(i);
   }
 
-  const dates = prevDates.concat(thisDates, nextDates);
-
-  const firstDateIndex = dates.indexOf(1);
-  const lastDateIndex = dates.lastIndexOf(tlDate);
+  // const firstDateIndex = dates.indexOf(1);
+  // const lastDateIndex = dates.lastIndexOf(tlDate);
 
   const prevMonth = () => {
     if (month === 0) {
@@ -189,11 +210,59 @@ function App() {
     }
   };
 
-  const today = new Date();
-  console.log(today.getMonth());
-  console.log(month);
-  console.log(today.getFullYear());
-  console.log(year);
+  const makePrevCalendar = (date, i) => (
+    <Datea
+      key={i}
+      onClick={() => {
+        prevMonth();
+        setSelected(new Date(year, month - 1, date));
+      }}
+    >
+      <span className="other">{date}</span>
+    </Datea>
+  );
+
+  const makeCalendar = (date, i) => {
+    const condition2 =
+      year === today.getFullYear() &&
+      month === today.getMonth() &&
+      date === today.getDate()
+        ? 'today'
+        : null;
+
+    const condition3 =
+      year === selected.getFullYear() &&
+      month === selected.getMonth() &&
+      date === selected.getDate()
+        ? 'selected'
+        : null;
+
+    return (
+      <Datea
+        key={i}
+        data-id={date}
+        onClick={(e) => {
+          if (date === parseInt(e.target.dataset.id)) {
+            setSelected(new Date(year, month, date));
+          }
+        }}
+      >
+        <span className={` ${condition2} ${condition3}`}>{date}</span>
+      </Datea>
+    );
+  };
+
+  const makeNextCalendar = (date, i) => (
+    <Datea
+      key={i}
+      onClick={() => {
+        nextMonth();
+        setSelected(new Date(year, month + 1, date));
+      }}
+    >
+      <span className="other">{date}</span>
+    </Datea>
+  );
 
   return (
     <>
@@ -219,21 +288,9 @@ function App() {
           <Day>Sat</Day>
         </Days>
         <Dates>
-          {dates.map((date, i) => {
-            const condition1 =
-              i >= firstDateIndex && i < lastDateIndex + 1 ? null : 'other';
-            const condition2 =
-              year === today.getFullYear() &&
-              month === today.getMonth() &&
-              date === today.getDate()
-                ? 'today'
-                : null;
-            return (
-              <Datea key={i}>
-                <span className={`${condition1} ${condition2}`}>{date}</span>
-              </Datea>
-            );
-          })}
+          {prevDates.map((date, i) => makePrevCalendar(date, i))}
+          {thisDates.map((date, i) => makeCalendar(date, i))}
+          {nextDates.map((date, i) => makeNextCalendar(date, i))}
         </Dates>
       </Calendar>
     </>
