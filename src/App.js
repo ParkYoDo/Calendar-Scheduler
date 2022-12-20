@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import SoftMakerTejeHandwriting from './fonts/SoftMakerTejeHandwriting.ttf';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Modal from 'react-bootstrap/Modal';
 
 const GlobalStyle = createGlobalStyle`
 @font-face {
@@ -150,17 +153,14 @@ function App() {
 
   const [selected, setSelected] = useState(new Date());
 
+  const [modal, setModal] = useState(false);
+
   const [calendar, setCalendar] = useState({
     year: new Date().getFullYear(), // 2022년
     month: new Date().getMonth(), // 11월(+1해서 사용)
-    modal: {
-      index: '',
-      visible: false,
-    },
     schedule: [],
-    asd: [],
   });
-  const { year, month, modal, schedule } = calendar;
+  const { year, month, schedule } = calendar;
 
   const prevLast = new Date(year, month, 0); //11월 마지막 일
   const thisLast = new Date(year, month + 1, 0); //12월 마지막 일
@@ -183,9 +183,6 @@ function App() {
   for (let i = 1; i < 7 - tlDay; i++) {
     nextDates.push(i);
   }
-
-  // const firstDateIndex = dates.indexOf(1);
-  // const lastDateIndex = dates.lastIndexOf(tlDate);
 
   const prevMonth = () => {
     if (month === 0) {
@@ -223,14 +220,14 @@ function App() {
   );
 
   const makeCalendar = (date, i) => {
-    const condition2 =
+    const condition1 =
       year === today.getFullYear() &&
       month === today.getMonth() &&
       date === today.getDate()
         ? 'today'
         : null;
 
-    const condition3 =
+    const condition2 =
       year === selected.getFullYear() &&
       month === selected.getMonth() &&
       date === selected.getDate()
@@ -242,12 +239,11 @@ function App() {
         key={i}
         data-id={date}
         onClick={(e) => {
-          if (date === parseInt(e.target.dataset.id)) {
-            setSelected(new Date(year, month, date));
-          }
+          setSelected(new Date(year, month, date));
+          modalOpen();
         }}
       >
-        <span className={` ${condition2} ${condition3}`}>{date}</span>
+        <span className={` ${condition1} ${condition2}`}>{date}</span>
       </Datea>
     );
   };
@@ -264,9 +260,14 @@ function App() {
     </Datea>
   );
 
+  const modalOpen = () => {
+    setModal(true);
+  };
+
   return (
     <>
       <GlobalStyle />
+      <ScheduleModal modal={modal} setModal={setModal} selected={selected} />
       <Calendar>
         <Header>
           <YearMonth>
@@ -293,6 +294,81 @@ function App() {
           {nextDates.map((date, i) => makeNextCalendar(date, i))}
         </Dates>
       </Calendar>
+    </>
+  );
+}
+
+function ScheduleModal({ modal, setModal, selected }) {
+  const selectedDate = `${selected.getFullYear()}-${
+    selected.getMonth() + 1
+  }-${selected.getDate()}`;
+
+  const [input, setInput] = useState({
+    date: selectedDate,
+    schedule: ``,
+  });
+
+  const { date, schedule } = input;
+
+  const modalClose = () => {
+    setModal(false);
+    setInput({
+      date: selectedDate,
+      schedule: ``,
+    });
+  };
+
+  const onChange = (e) => {
+    const { name, value } = e.target;
+    setInput({ ...input, [name]: value });
+  };
+
+  useEffect(() => {
+    console.log(input);
+  }, [input]);
+
+  return (
+    <>
+      <Modal show={modal} onHide={modalClose} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Shedule Calendar</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form>
+            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+              <Form.Label>Select Date</Form.Label>
+              <Form.Control
+                name="date"
+                type="date"
+                value={date}
+                onChange={onChange}
+                autoFocus
+              />
+            </Form.Group>
+            <Form.Group
+              className="mb-3"
+              controlId="exampleForm.ControlTextarea1"
+            >
+              <Form.Label>Enter Schedule</Form.Label>
+              <Form.Control
+                name="schedule"
+                value={schedule}
+                onChange={onChange}
+                as="textarea"
+                rows={3}
+              />
+            </Form.Group>
+          </Form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={modalClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={modalClose}>
+            Save changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }
