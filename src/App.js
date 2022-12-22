@@ -252,8 +252,7 @@ function App() {
     return (
       <>
         <Datea
-          key={i}
-          data-id={date}
+          key={date}
           onClick={(e) => {
             setSelected(new Date(year, month, date));
             scheduleNum ? scheduleModalOpen() : registerModalOpen();
@@ -270,7 +269,7 @@ function App() {
 
   const makeNextCalendar = (date, i) => (
     <Datea
-      key={i}
+      key={date}
       onClick={() => {
         nextMonth();
         setSelected(new Date(year, month + 1, date));
@@ -287,10 +286,6 @@ function App() {
   const registerModalOpen = () => {
     setRegisterModal(true);
   };
-
-  useEffect(() => {
-    console.log(schedules);
-  }, [schedules]);
 
   return (
     <>
@@ -349,8 +344,12 @@ function RegisterModal({
   setScheduleModal,
 }) {
   const selectedDate = `${selected.getFullYear()}-${
-    selected.getMonth() + 1
-  }-${selected.getDate()}`;
+    selected.getMonth() >= 9
+      ? selected.getMonth() + 1
+      : '0' + (selected.getMonth() + 1)
+  }-${
+    selected.getDate() >= 10 ? selected.getDate() : '0' + selected.getDate()
+  }`;
 
   const [input, setInput] = useState({
     date: '',
@@ -466,7 +465,9 @@ function ScheduleModal({
                 schedule.date ===
                   `${selected.getFullYear()}-${
                     selected.getMonth() + 1
-                  }-${selected.getDate()}` && <li>{schedule.content}</li>,
+                  }-${selected.getDate()}` && (
+                  <li key={i}>{schedule.content}</li>
+                ),
             )}
           </ul>
         </Modal.Body>
