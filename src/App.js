@@ -4,6 +4,7 @@ import SoftMakerTejeHandwriting from './fonts/SoftMakerTejeHandwriting.ttf';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
+import Badge from 'react-bootstrap/Badge';
 
 const GlobalStyle = createGlobalStyle`
 @font-face {
@@ -100,6 +101,8 @@ const Datea = styled.div`
   text-align: right;
   border-bottom: 1px solid #333333;
   border-left: 1px solid #333333;
+  position: relative;
+
   :nth-child(7n + 1) {
     color: #d13e3e;
   }
@@ -146,6 +149,12 @@ const Datea = styled.div`
     transform: translate(-50%, -50%);
     content: '';
   }
+
+  .scheduleNum {
+    position: absolute;
+    bottom: 5%;
+    right: 5%;
+  }
 `;
 
 function App() {
@@ -153,14 +162,16 @@ function App() {
 
   const [selected, setSelected] = useState(new Date());
 
-  const [modal, setModal] = useState(false);
+  const [registerModal, setRegisterModal] = useState(false);
+  const [scheduleModal, setScheduleModal] = useState(false);
 
   const [calendar, setCalendar] = useState({
     year: new Date().getFullYear(), // 2022년
     month: new Date().getMonth(), // 11월(+1해서 사용)
-    schedule: [],
   });
-  const { year, month, schedule } = calendar;
+  const { year, month } = calendar;
+
+  const [schedules, setSchedules] = useState([]);
 
   const prevLast = new Date(year, month, 0); //11월 마지막 일
   const thisLast = new Date(year, month + 1, 0); //12월 마지막 일
@@ -234,17 +245,26 @@ function App() {
         ? 'selected'
         : null;
 
+    const scheduleNum = schedules.filter(
+      (schedule) => schedule.date === `${year}-${month + 1}-${date}`,
+    ).length;
+
     return (
-      <Datea
-        key={i}
-        data-id={date}
-        onClick={(e) => {
-          setSelected(new Date(year, month, date));
-          modalOpen();
-        }}
-      >
-        <span className={` ${condition1} ${condition2}`}>{date}</span>
-      </Datea>
+      <>
+        <Datea
+          key={i}
+          data-id={date}
+          onClick={(e) => {
+            setSelected(new Date(year, month, date));
+            scheduleNum ? scheduleModalOpen() : registerModalOpen();
+          }}
+        >
+          <span className={` ${condition1} ${condition2}`}>{date}</span>
+          <Badge bg="secondary scheduleNum">
+            {scheduleNum !== 0 && scheduleNum}
+          </Badge>
+        </Datea>
+      </>
     );
   };
 
@@ -260,14 +280,36 @@ function App() {
     </Datea>
   );
 
-  const modalOpen = () => {
-    setModal(true);
+  const scheduleModalOpen = () => {
+    setScheduleModal(true);
   };
+
+  const registerModalOpen = () => {
+    setRegisterModal(true);
+  };
+
+  useEffect(() => {
+    console.log(schedules);
+  }, [schedules]);
 
   return (
     <>
       <GlobalStyle />
-      <ScheduleModal modal={modal} setModal={setModal} selected={selected} />
+      <ScheduleModal
+        scheduleModal={scheduleModal}
+        setScheduleModal={setScheduleModal}
+        selected={selected}
+        setRegisterModal={setRegisterModal}
+        schedules={schedules}
+      />
+      <RegisterModal
+        registerModal={registerModal}
+        setRegisterModal={setRegisterModal}
+        selected={selected}
+        setSchedules={setSchedules}
+        schedules={schedules}
+        setScheduleModal={setScheduleModal}
+      />
       <Calendar>
         <Header>
           <YearMonth>
@@ -298,51 +340,59 @@ function App() {
   );
 }
 
-function ScheduleModal({ modal, setModal, selected }) {
+function RegisterModal({
+  registerModal,
+  setRegisterModal,
+  selected,
+  setSchedules,
+  schedules,
+  setScheduleModal,
+}) {
   const selectedDate = `${selected.getFullYear()}-${
     selected.getMonth() + 1
   }-${selected.getDate()}`;
 
   const [input, setInput] = useState({
-    date: selectedDate,
-    schedule: ``,
+    date: '',
+    content: '',
   });
 
-  const { date, schedule } = input;
+  const { content } = input;
 
-  const modalClose = () => {
-    setModal(false);
+  const registerModalClose = () => {
+    setRegisterModal(false);
     setInput({
-      date: selectedDate,
-      schedule: ``,
+      date: '',
+      content: ``,
     });
   };
 
   const onChange = (e) => {
     const { name, value } = e.target;
-    setInput({ ...input, [name]: value });
+    setInput({ date: selectedDate, [name]: value });
   };
 
-  useEffect(() => {
-    console.log(input);
-  }, [input]);
+  const onSubmit = () => {
+    setSchedules([...schedules, input]);
+    registerModalClose();
+    setScheduleModal(true);
+  };
 
   return (
     <>
-      <Modal show={modal} onHide={modalClose} centered>
+      <Modal show={registerModal} onHide={registerModalClose} centered>
         <Modal.Header closeButton>
           <Modal.Title>Shedule Calendar</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>Select Date</Form.Label>
+              <Form.Label>Selected Date</Form.Label>
               <Form.Control
                 name="date"
                 type="date"
-                value={date}
+                value={selectedDate}
                 onChange={onChange}
-                autoFocus
               />
             </Form.Group>
             <Form.Group
@@ -351,21 +401,81 @@ function ScheduleModal({ modal, setModal, selected }) {
             >
               <Form.Label>Enter Schedule</Form.Label>
               <Form.Control
-                name="schedule"
-                value={schedule}
+                name="content"
+                value={content}
                 onChange={onChange}
                 as="textarea"
                 rows={3}
+                autoFocus
               />
             </Form.Group>
           </Form>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={modalClose}>
+          <Button variant="primary" onClick={onSubmit}>
+            Save changes
+          </Button>
+          <Button variant="secondary" onClick={registerModalClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={modalClose}>
-            Save changes
+        </Modal.Footer>
+      </Modal>
+    </>
+  );
+}
+
+function ScheduleModal({
+  scheduleModal,
+  setScheduleModal,
+  selected,
+  setRegisterModal,
+  schedules,
+}) {
+  const scheduleModalClose = () => {
+    setScheduleModal(false);
+  };
+
+  const selectedDate = `${selected.getFullYear()}-${
+    selected.getMonth() + 1
+  }-${selected.getDate()}`;
+
+  const registerModalOpen = () => {
+    setRegisterModal(true);
+    scheduleModalClose();
+  };
+
+  return (
+    <>
+      <Modal
+        show={scheduleModal}
+        onHide={scheduleModalClose}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            Date : {selectedDate}
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body style={{ height: '18vh', overflowY: 'auto' }}>
+          <h4>Schedule :</h4>
+          <ul>
+            {schedules.map(
+              (schedule, i) =>
+                schedule.date ===
+                  `${selected.getFullYear()}-${
+                    selected.getMonth() + 1
+                  }-${selected.getDate()}` && <li>{schedule.content}</li>,
+            )}
+          </ul>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="primary" onClick={registerModalOpen}>
+            Add
+          </Button>
+          <Button variant="secondary" onClick={scheduleModalClose}>
+            Close
           </Button>
         </Modal.Footer>
       </Modal>
