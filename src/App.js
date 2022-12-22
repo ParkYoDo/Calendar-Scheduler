@@ -246,7 +246,11 @@ function App() {
         : null;
 
     const scheduleNum = schedules.filter(
-      (schedule) => schedule.date === `${year}-${month + 1}-${date}`,
+      (schedule) =>
+        schedule.date ===
+        `${year}-${month >= 9 ? month + 1 : '0' + (month + 1)}-${
+          date >= 10 ? date : '0' + date
+        }`,
     ).length;
 
     return (
@@ -351,6 +355,10 @@ function RegisterModal({
     selected.getDate() >= 10 ? selected.getDate() : '0' + selected.getDate()
   }`;
 
+  // const selectedDate = `${selected.getFullYear()}-${
+  //   selected.getMonth() + 1
+  // }-${selected.getDate()}`;
+
   const [input, setInput] = useState({
     date: '',
     content: '',
@@ -376,6 +384,14 @@ function RegisterModal({
     registerModalClose();
     setScheduleModal(true);
   };
+
+  useEffect(() => {
+    console.log(schedules);
+  }, [schedules]);
+
+  useEffect(() => {
+    console.log(input);
+  }, [input]);
 
   return (
     <>
@@ -464,10 +480,14 @@ function ScheduleModal({
               (schedule, i) =>
                 schedule.date ===
                   `${selected.getFullYear()}-${
-                    selected.getMonth() + 1
-                  }-${selected.getDate()}` && (
-                  <li key={i}>{schedule.content}</li>
-                ),
+                    selected.getMonth() >= 9
+                      ? selected.getMonth() + 1
+                      : '0' + (selected.getMonth() + 1)
+                  }-${
+                    selected.getDate() >= 10
+                      ? selected.getDate()
+                      : '0' + selected.getDate()
+                  }` && <li key={i}>{schedule.content}</li>,
             )}
           </ul>
         </Modal.Body>
