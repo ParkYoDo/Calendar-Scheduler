@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import SoftMakerTejeHandwriting from './fonts/SoftMakerTejeHandwriting.ttf';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import Badge from 'react-bootstrap/Badge';
+import { MdDelete } from 'react-icons/md';
 
 const GlobalStyle = createGlobalStyle`
 @font-face {
@@ -157,6 +158,25 @@ const Datea = styled.div`
   }
 `;
 
+const ScheduleDelete = styled.div`
+  display: none;
+  color: #ced4da;
+  &:hover {
+    color: #ff6b6b;
+  }
+  &:active {
+    color: #fa5252;
+  }
+`;
+
+const ScheduleList = styled.li`
+  &:hover {
+    ${ScheduleDelete} {
+      display: inline-block;
+    }
+  }
+`;
+
 function App() {
   const today = new Date();
 
@@ -300,6 +320,7 @@ function App() {
         selected={selected}
         setRegisterModal={setRegisterModal}
         schedules={schedules}
+        setSchedules={setSchedules}
       />
       <RegisterModal
         registerModal={registerModal}
@@ -347,6 +368,8 @@ function RegisterModal({
   schedules,
   setScheduleModal,
 }) {
+  const scheduleId = useRef(0);
+
   const selectedDate = `${selected.getFullYear()}-${
     selected.getMonth() >= 9
       ? selected.getMonth() + 1
@@ -354,10 +377,6 @@ function RegisterModal({
   }-${
     selected.getDate() >= 10 ? selected.getDate() : '0' + selected.getDate()
   }`;
-
-  // const selectedDate = `${selected.getFullYear()}-${
-  //   selected.getMonth() + 1
-  // }-${selected.getDate()}`;
 
   const [input, setInput] = useState({
     date: '',
@@ -380,18 +399,11 @@ function RegisterModal({
   };
 
   const onSubmit = () => {
-    setSchedules([...schedules, input]);
+    setSchedules([...schedules, { id: scheduleId.current, ...input }]);
+    scheduleId.current += 1;
     registerModalClose();
     setScheduleModal(true);
   };
-
-  useEffect(() => {
-    console.log(schedules);
-  }, [schedules]);
-
-  useEffect(() => {
-    console.log(input);
-  }, [input]);
 
   return (
     <>
@@ -445,6 +457,7 @@ function ScheduleModal({
   selected,
   setRegisterModal,
   schedules,
+  setSchedules,
 }) {
   const scheduleModalClose = () => {
     setScheduleModal(false);
@@ -458,6 +471,10 @@ function ScheduleModal({
     setRegisterModal(true);
     scheduleModalClose();
   };
+
+  useEffect(() => {
+    console.log(schedules);
+  }, [schedules]);
 
   return (
     <>
@@ -487,7 +504,24 @@ function ScheduleModal({
                     selected.getDate() >= 10
                       ? selected.getDate()
                       : '0' + selected.getDate()
-                  }` && <li key={i}>{schedule.content}</li>,
+                  }` && (
+                  <ScheduleList key={i}>
+                    {schedule.content}{' '}
+                    <ScheduleDelete>
+                      <MdDelete
+                        data-id={schedule.id}
+                        onClick={(e) => {
+                          setSchedules(
+                            schedules.filter(
+                              (schedule) =>
+                                schedule.id !== parseInt(e.target.dataset.id),
+                            ),
+                          );
+                        }}
+                      />
+                    </ScheduleDelete>
+                  </ScheduleList>
+                ),
             )}
           </ul>
         </Modal.Body>
