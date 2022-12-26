@@ -32,6 +32,9 @@ const GlobalStyle = createGlobalStyle`
 const Calendar = styled.div`
   width: 600px;
   margin: 50px;
+  @media screen and (max-width: 500px) {
+    width: 310px;
+  }
 `;
 
 const Header = styled.div`
@@ -42,6 +45,9 @@ const Header = styled.div`
 
 const YearMonth = styled.div`
   font-size: 35px;
+  @media screen and (max-width: 500px) {
+    font-size: 25px;
+  }
 `;
 
 const Nav = styled.div`
@@ -58,6 +64,10 @@ const Btn = styled.button`
   line-height: 34px;
   background-color: transparent;
   cursor: pointer;
+  @media screen and (max-width: 500px) {
+    width: 20px;
+    font-size: 14px;
+  }
 `;
 
 const TodayBtn = styled.button`
@@ -70,11 +80,17 @@ const TodayBtn = styled.button`
   cursor: pointer;
   border-left: 1px solid #333333;
   border-right: 1px solid #333333;
+  @media screen and (max-width: 500px) {
+    width: 50px;
+    font-size: 14px;
+  }
 `;
 
 const Days = styled.div`
   display: flex;
-  margin: 25px 0 10px;
+  @media screen and (max-width: 500px) {
+    margin: 10px 0;
+  }
 `;
 
 const Day = styled.div`
@@ -94,6 +110,9 @@ const Dates = styled.div`
   height: 500px;
   border-top: 1px solid #333333;
   border-right: 1px solid #333333;
+  @media screen and (max-width: 500px) {
+    height: 380px;
+  }
 `;
 
 const Datea = styled.div`
@@ -155,6 +174,17 @@ const Datea = styled.div`
     position: absolute;
     bottom: 5%;
     right: 5%;
+  }
+  @media screen and (max-width: 500px) {
+    padding: 7px;
+    .today::before {
+      width: 22px;
+      height: 22px;
+    }
+    .selected::before {
+      width: 20px;
+      height: 20px;
+    }
   }
 `;
 
