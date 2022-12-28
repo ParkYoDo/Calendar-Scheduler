@@ -3,16 +3,18 @@ import { flushSync } from 'react-dom';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import { useDispatch } from 'react-redux';
+import { addSchedules } from '../../store/schedules';
 
 function RegisterModal({
   registerModal,
   setRegisterModal,
-  selected,
-  setSchedules,
-  schedules,
   setScheduleModal,
+  selected,
 }) {
-  const scheduleId = useRef(0);
+  const dispatch = useDispatch();
+
+  const scheduleId = useRef(2);
 
   const selectedDate = `${selected.getFullYear()}-${
     selected.getMonth() >= 9
@@ -44,7 +46,7 @@ function RegisterModal({
 
   const onSubmit = () => {
     flushSync(() => {
-      setSchedules([...schedules, { id: scheduleId.current, ...input }]);
+      dispatch(addSchedules({ id: scheduleId.current, ...input }));
     });
     scheduleId.current += 1;
     registerModalClose();

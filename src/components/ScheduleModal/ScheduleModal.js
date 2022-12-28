@@ -3,15 +3,18 @@ import * as S from './ScheduleModalStyle';
 import { MdDelete } from 'react-icons/md';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import { useSelector, useDispatch } from 'react-redux';
+import { removeSchedules } from '../../store/schedules';
 
 function ScheduleModal({
   scheduleModal,
   setScheduleModal,
-  selected,
   setRegisterModal,
-  schedules,
-  setSchedules,
+  selected,
 }) {
+  const schedules = useSelector((state) => state.schedules);
+  const dispatch = useDispatch();
+
   const scheduleModalClose = () => {
     setScheduleModal(false);
   };
@@ -27,6 +30,10 @@ function ScheduleModal({
   const registerModalOpen = () => {
     setRegisterModal(true);
     scheduleModalClose();
+  };
+
+  const scheduleRemove = (e) => {
+    dispatch(removeSchedules(e.target.dataset.id));
   };
 
   return (
@@ -50,18 +57,11 @@ function ScheduleModal({
               (schedule, i) =>
                 schedule.date === selectedDate && (
                   <S.ScheduleList key={i}>
-                    {schedule.content}{' '}
+                    {schedule.content}
                     <S.ScheduleDelete>
                       <MdDelete
                         data-id={schedule.id}
-                        onClick={(e) => {
-                          setSchedules(
-                            schedules.filter(
-                              (schedule) =>
-                                schedule.id !== parseInt(e.target.dataset.id),
-                            ),
-                          );
-                        }}
+                        onClick={scheduleRemove}
                       />
                     </S.ScheduleDelete>
                   </S.ScheduleList>

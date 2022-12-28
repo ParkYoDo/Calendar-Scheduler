@@ -3,10 +3,12 @@ import ScheduleModal from '../ScheduleModal/ScheduleModal';
 import RegisterModal from '../RegisterModal/RegisterModal';
 import * as S from './CalendarStyle';
 import Badge from 'react-bootstrap/Badge';
+import { useSelector } from 'react-redux';
 
 function Calendar() {
+  const schedules = useSelector((state) => state.schedules);
+
   const [selected, setSelected] = useState(new Date());
-  const [schedules, setSchedules] = useState([]);
 
   const [registerModal, setRegisterModal] = useState(false);
   const [scheduleModal, setScheduleModal] = useState(false);
@@ -140,18 +142,14 @@ function Calendar() {
       <ScheduleModal
         scheduleModal={scheduleModal}
         setScheduleModal={setScheduleModal}
-        selected={selected}
         setRegisterModal={setRegisterModal}
-        schedules={schedules}
-        setSchedules={setSchedules}
+        selected={selected}
       />
       <RegisterModal
         registerModal={registerModal}
         setRegisterModal={setRegisterModal}
-        selected={selected}
-        setSchedules={setSchedules}
-        schedules={schedules}
         setScheduleModal={setScheduleModal}
+        selected={selected}
       />
       <S.CalendarBlock>
         <S.Header>
