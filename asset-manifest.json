@@ -1,11 +1,11 @@
 {
   "files": {
-    "main.js": "/react_calendar/static/js/main.29d3dafc.js",
+    "main.js": "/react_calendar/static/js/main.7b5425c5.js",
     "static/media/SoftMakerTejeHandwriting.ttf": "/react_calendar/static/media/SoftMakerTejeHandwriting.660f768fe01b576f62bb.ttf",
     "index.html": "/react_calendar/index.html",
-    "main.29d3dafc.js.map": "/react_calendar/static/js/main.29d3dafc.js.map"
+    "main.7b5425c5.js.map": "/react_calendar/static/js/main.7b5425c5.js.map"
   },
   "entrypoints": [
-    "static/js/main.29d3dafc.js"
+    "static/js/main.7b5425c5.js"
   ]
 }
