@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import * as S from './ScheduleModalStyle';
 import { MdDelete } from 'react-icons/md';
 import Modal from 'react-bootstrap/Modal';
@@ -36,6 +36,10 @@ function ScheduleModal({
     dispatch(removeSchedules(e.target.dataset.id));
   };
 
+  useEffect(() => {
+    schedules.filter((schedule) => schedule.date === selectedDate).length ===
+      0 && scheduleModalClose();
+  });
   return (
     <>
       <Modal

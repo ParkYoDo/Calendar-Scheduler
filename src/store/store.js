@@ -19,7 +19,8 @@ const persistConfig = {
   key: 'root',
   version: 1,
   storage,
-  whitelist: ['schedules'],
+  // blacklist: ['schedules'],
+  // whitelist: ['schedules'],
 };
 
 const persistedReducer = persistReducer(persistConfig, reducers);

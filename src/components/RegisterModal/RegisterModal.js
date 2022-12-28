@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import { flushSync } from 'react-dom';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -45,12 +44,14 @@ function RegisterModal({
   };
 
   const onSubmit = () => {
-    flushSync(() => {
-      dispatch(addSchedules({ id: scheduleId.current, ...input }));
-    });
+    dispatch(addSchedules({ id: scheduleId.current, ...input }));
     scheduleId.current += 1;
     registerModalClose();
     setScheduleModal(true);
+  };
+
+  const onKeyDown = (e) => {
+    e.key === 'Enter' && onSubmit();
   };
 
   return (
@@ -82,6 +83,7 @@ function RegisterModal({
                 as="textarea"
                 rows={3}
                 autoFocus
+                onKeyDown={onKeyDown}
               />
             </Form.Group>
           </Form>
