@@ -17,7 +17,7 @@ export const Header = styled.div`
 export const YearMonth = styled.div`
   font-size: 35px;
   @media screen and (max-width: 500px) {
-    font-size: 25px;
+    font-size: 20px;
   }
 `;
 
@@ -54,6 +54,43 @@ export const TodayBtn = styled.button`
   @media screen and (max-width: 500px) {
     width: 50px;
     font-size: 14px;
+  }
+`;
+
+export const ScheduleListBtn = styled.button`
+  width: 150px;
+  height: 30px;
+  border: 1px solid #333333;
+  border-radius: 5px;
+  font-size: 16px;
+  line-height: 34px;
+  background-color: transparent;
+  position: relative;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  &:hover {
+    .badge {
+      display: block;
+    }
+  }
+  .badge {
+    display: none;
+    position: absolute;
+    top: 4px;
+    right: 10px;
+  }
+  @media screen and (max-width: 500px) {
+    width: 90px;
+    font-size: 12px;
+    text-align: left;
+    .badge {
+      display: none;
+      position: absolute;
+      font-size: 7px;
+      top: 7px;
+      right: 1px;
+    }
   }
 `;
 

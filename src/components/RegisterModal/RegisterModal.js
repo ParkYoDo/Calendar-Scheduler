@@ -13,7 +13,7 @@ function RegisterModal({
 }) {
   const dispatch = useDispatch();
 
-  const scheduleId = useRef(2);
+  const scheduleId = useRef(0);
 
   const selectedDate = `${selected.getFullYear()}-${
     selected.getMonth() >= 9

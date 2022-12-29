@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
 import ScheduleModal from '../ScheduleModal/ScheduleModal';
 import RegisterModal from '../RegisterModal/RegisterModal';
+import ScheduleListModal from '../ScheduleListModal/ScheduleListModal';
 import * as S from './CalendarStyle';
 import Badge from 'react-bootstrap/Badge';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { sortSchedules } from '../../store/schedules';
 
 function Calendar() {
   const schedules = useSelector((state) => state.schedules);
+  const dispatch = useDispatch();
 
   const [selected, setSelected] = useState(new Date());
 
   const [registerModal, setRegisterModal] = useState(false);
   const [scheduleModal, setScheduleModal] = useState(false);
+  const [schuleListModal, setScheduleListModal] = useState(false);
 
   const [calendar, setCalendar] = useState({
     year: new Date().getFullYear(), // 2022년
@@ -137,6 +141,16 @@ function Calendar() {
     setRegisterModal(true);
   };
 
+  const scheduleListModalOpen = (e) => {
+    if (schedules.length === 0) {
+      alert('Registered schedule does not exist!');
+      e.preventDefault();
+    } else {
+      dispatch(sortSchedules());
+      setScheduleListModal(true);
+    }
+  };
+
   return (
     <>
       <ScheduleModal
@@ -151,8 +165,16 @@ function Calendar() {
         setScheduleModal={setScheduleModal}
         selected={selected}
       />
+      <ScheduleListModal
+        schuleListModal={schuleListModal}
+        setScheduleListModal={setScheduleListModal}
+        selected={selected}
+      />
       <S.CalendarBlock>
         <S.Header>
+          <S.ScheduleListBtn onClick={scheduleListModalOpen}>
+            📅 Schedule <Badge bg="secondary badge">{schedules.length}</Badge>
+          </S.ScheduleListBtn>
           <S.YearMonth>
             {year}년 {month + 1}월
           </S.YearMonth>

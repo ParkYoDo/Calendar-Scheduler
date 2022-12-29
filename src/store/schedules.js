@@ -12,8 +12,14 @@ const schedules = createSlice({
         (schedule) => schedule.id !== parseInt(action.payload),
       );
     },
+    sortSchedules(state) {
+      return state.sort(function (a, b) {
+        return new Date(a.date) - new Date(b.date);
+      });
+    },
   },
 });
 
 export default schedules;
-export const { addSchedules, removeSchedules } = schedules.actions;
+export const { addSchedules, removeSchedules, sortSchedules } =
+  schedules.actions;
