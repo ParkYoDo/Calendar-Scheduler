@@ -199,11 +199,6 @@ function Calendar() {
           {nextDates.map((date, i) => makeNextCalendar(date, i))}
         </S.Dates>
       </S.CalendarBlock>
-      {/* {schedules.map((a, i) => (
-        <h1>
-          {i}. {a.date}:{a.content}
-        </h1>
-      ))} */}
     </>
   );
 }
