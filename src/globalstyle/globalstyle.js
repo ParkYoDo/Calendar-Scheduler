@@ -2,12 +2,12 @@ import { createGlobalStyle } from 'styled-components';
 import SoftMakerTejeHandwriting from '../fonts/SoftMakerTejeHandwriting.ttf';
 
 export const GlobalStyle = createGlobalStyle`
-@font-face {
+/* @font-face {
   font-family: 'SoftMakerTejeHandwriting';
   src: local('SoftMakerTejeHandwriting'), local('SoftMakerTejeHandwriting');
   font-style: normal;
   src: url(${SoftMakerTejeHandwriting}) format('truetype')
-}
+} */
   * {
     margin: 0;
     padding: 0;
