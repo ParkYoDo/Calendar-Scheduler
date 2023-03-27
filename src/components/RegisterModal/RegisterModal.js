@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addSchedules } from '../../store/schedules';
 
 function RegisterModal({
@@ -12,9 +12,9 @@ function RegisterModal({
   selected,
 }) {
   const dispatch = useDispatch();
+  const schedules = useSelector((state) => state.schedules);
 
-  const scheduleId = useRef(0);
-
+  const scheduleId = useRef(schedules.length + 1);
   const selectedDate = `${selected.getFullYear()}-${
     selected.getMonth() >= 9
       ? selected.getMonth() + 1
@@ -27,7 +27,6 @@ function RegisterModal({
     date: '',
     content: '',
   });
-
   const { content } = input;
 
   const registerModalClose = () => {

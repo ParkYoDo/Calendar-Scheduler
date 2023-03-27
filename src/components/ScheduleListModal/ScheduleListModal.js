@@ -53,13 +53,16 @@ function ScheduleListModal({
           <ol>
             {schedules.map((schedule, i) => (
               <S.ScheduleList key={schedule.id}>
-                {schedule.date}
-                <p>
+                <S.ScheduleDate>{schedule.date}</S.ScheduleDate>
+                <S.ScheduleContent>
                   - {schedule.content}
-                  <S.ScheduleDelete>
+                  <S.ScheduleDelete
+                    data-id={schedule.id}
+                    onClick={scheduleRemove}
+                  >
                     <MdDelete data-id={schedule.id} onClick={scheduleRemove} />
                   </S.ScheduleDelete>
-                </p>
+                </S.ScheduleContent>
               </S.ScheduleList>
             ))}
           </ol>

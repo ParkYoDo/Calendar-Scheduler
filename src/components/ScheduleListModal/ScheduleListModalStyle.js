@@ -5,7 +5,8 @@ export const ScheduleDelete = styled.button`
   border: none;
   background-color: transparent;
   color: #ced4da;
-  padding-left: 5px;
+  padding-left: 12px;
+  font-size: 20px;
   &:hover {
     color: #ff6b6b;
   }
@@ -14,7 +15,16 @@ export const ScheduleDelete = styled.button`
   }
 `;
 
+export const ScheduleDate = styled.div`
+  font-size: 24px;
+`;
+
+export const ScheduleContent = styled.div`
+  font-size: 20px;
+`;
+
 export const ScheduleList = styled.li`
+  font-size: 24px;
   &:hover {
     ${ScheduleDelete} {
       display: inline-block;

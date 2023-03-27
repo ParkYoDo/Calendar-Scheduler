@@ -61,13 +61,18 @@ function ScheduleModal({
               (schedule, i) =>
                 schedule.date === selectedDate && (
                   <S.ScheduleList key={i}>
-                    {schedule.content}
-                    <S.ScheduleDelete>
-                      <MdDelete
+                    <S.ScheduleContent>
+                      {schedule.content}{' '}
+                      <S.ScheduleDelete
                         data-id={schedule.id}
                         onClick={scheduleRemove}
-                      />
-                    </S.ScheduleDelete>
+                      >
+                        <MdDelete
+                          data-id={schedule.id}
+                          onClick={scheduleRemove}
+                        />
+                      </S.ScheduleDelete>
+                    </S.ScheduleContent>
                   </S.ScheduleList>
                 ),
             )}
