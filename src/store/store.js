@@ -1,14 +1,6 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import storage from 'redux-persist/lib/storage';
-import {
-  persistReducer,
-  FLUSH,
-  REHYDRATE,
-  PAUSE,
-  PERSIST,
-  PURGE,
-  REGISTER,
-} from 'redux-persist';
+import { persistReducer } from 'redux-persist';
 import schedules from './schedules';
 
 const reducers = combineReducers({
@@ -28,9 +20,7 @@ const persistedReducer = persistReducer(persistConfig, reducers);
 export default configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({
-      serializableCheck: {
-        ignoreActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-      },
-    }),
+    getDefaultMiddleware({ serializableCheck: false }),
 });
+
+// export type RootState = ReturnType<typeof reducers>;
