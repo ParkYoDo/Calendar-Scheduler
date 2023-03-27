@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import ScheduleModal from '../ScheduleModal/ScheduleModal';
-import RegisterModal from '../RegisterModal/RegisterModal';
-import ScheduleListModal from '../ScheduleListModal/ScheduleListModal';
-import * as S from './CalendarStyle';
+import ScheduleModal from 'components/ScheduleModal/ScheduleModal';
+import RegisterModal from 'components/RegisterModal/RegisterModal';
+import ScheduleListModal from 'components/ScheduleListModal/ScheduleListModal';
+import * as S from 'components/Calendar/CalendarStyle';
 import Badge from 'react-bootstrap/Badge';
 import { useSelector, useDispatch } from 'react-redux';
-import { sortSchedules } from '../../store/schedules';
+import { sortSchedules } from 'store/schedules';
+import { RootState } from 'store/store';
 
 function Calendar() {
-  const schedules = useSelector((state) => state.schedules);
+  const schedules = useSelector((state: RootState) => state.schedules);
   const dispatch = useDispatch();
 
   const [selected, setSelected] = useState(new Date());
@@ -68,7 +69,7 @@ function Calendar() {
     }
   };
 
-  const makePrevCalendar = (date, i) => (
+  const makePrevCalendar = (date: number) => (
     <S.Date
       key={date}
       onClick={() => {
@@ -80,7 +81,7 @@ function Calendar() {
     </S.Date>
   );
 
-  const makeCalendar = (date, i) => {
+  const makeCalendar = (date: number) => {
     const today = new Date();
 
     const condition1 =
@@ -121,7 +122,7 @@ function Calendar() {
     );
   };
 
-  const makeNextCalendar = (date, i) => (
+  const makeNextCalendar = (date: number) => (
     <S.Date
       key={date}
       onClick={() => {
@@ -141,7 +142,7 @@ function Calendar() {
     setRegisterModal(true);
   };
 
-  const scheduleListModalOpen = (e) => {
+  const scheduleListModalOpen = () => {
     if (schedules.length === 0) {
       alert('Registered schedule does not exist');
     } else {
@@ -193,9 +194,9 @@ function Calendar() {
           <S.Day>Sat</S.Day>
         </S.Days>
         <S.Dates>
-          {prevDates.map((date, i) => makePrevCalendar(date, i))}
-          {thisDates.map((date, i) => makeCalendar(date, i))}
-          {nextDates.map((date, i) => makeNextCalendar(date, i))}
+          {prevDates.map((date) => makePrevCalendar(date))}
+          {thisDates.map((date) => makeCalendar(date))}
+          {nextDates.map((date) => makeNextCalendar(date))}
         </S.Dates>
       </S.CalendarBlock>
     </>

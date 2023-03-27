@@ -1,5 +1,5 @@
 import { createGlobalStyle } from 'styled-components';
-import SoftMakerTejeHandwriting from '../fonts/SoftMakerTejeHandwriting.ttf';
+import SoftMakerTejeHandwriting from 'fonts/SoftMakerTejeHandwriting.ttf';
 
 export const GlobalStyle = createGlobalStyle`
   * {

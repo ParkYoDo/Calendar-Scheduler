@@ -1,20 +1,29 @@
 import React, { useRef, useState } from 'react';
+import * as S from 'components/RegisterModal/RegisterModalStyle';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useDispatch, useSelector } from 'react-redux';
-import { addSchedules } from '../../store/schedules';
+import { addSchedules } from 'store/schedules';
+import { RootState } from 'store/store';
+
+interface Props {
+  registerModal: boolean;
+  setRegisterModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setScheduleModal: React.Dispatch<React.SetStateAction<boolean>>;
+  selected: Date;
+}
 
 function RegisterModal({
   registerModal,
   setRegisterModal,
   setScheduleModal,
   selected,
-}) {
+}: Props) {
   const dispatch = useDispatch();
-  const schedules = useSelector((state) => state.schedules);
+  const schedules = useSelector((state: RootState) => state.schedules);
 
-  const scheduleId = useRef(schedules.length + 1);
+  const scheduleId = useRef<number>(schedules.length + 1);
   const selectedDate = `${selected.getFullYear()}-${
     selected.getMonth() >= 9
       ? selected.getMonth() + 1
@@ -37,9 +46,9 @@ function RegisterModal({
     });
   };
 
-  const onChange = (e) => {
-    const { name, value } = e.target;
-    setInput({ date: selectedDate, [name]: value });
+  const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const { value } = e.target;
+    setInput({ date: selectedDate, content: value });
   };
 
   const onSubmit = () => {
@@ -49,7 +58,7 @@ function RegisterModal({
     setScheduleModal(true);
   };
 
-  const onKeyDown = (e) => {
+  const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     e.key === 'Enter' && onSubmit();
   };
 
@@ -62,21 +71,15 @@ function RegisterModal({
         <Modal.Body>
           <Form>
             <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <Form.Label>Selected Date</Form.Label>
-              <Form.Control
-                name="date"
-                type="date"
-                disabled
-                value={selectedDate}
-                onChange={onChange}
-              />
+              <S.RegisterTitle>Selected Date</S.RegisterTitle>
+              <Form.Control type="date" disabled value={selectedDate} />
             </Form.Group>
             <Form.Group
               className="mb-3"
               controlId="exampleForm.ControlTextarea1"
             >
-              <Form.Label>Enter Schedule</Form.Label>
-              <Form.Control
+              <S.RegisterTitle>Enter Schedule</S.RegisterTitle>
+              <S.RegisterInput
                 name="content"
                 value={content}
                 onChange={onChange}

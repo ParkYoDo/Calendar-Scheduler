@@ -1,7 +1,7 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
-import schedules from './schedules';
+import schedules from 'store/schedules';
 
 const reducers = combineReducers({
   schedules: schedules.reducer,
@@ -23,4 +23,4 @@ export default configureStore({
     getDefaultMiddleware({ serializableCheck: false }),
 });
 
-// export type RootState = ReturnType<typeof reducers>;
+export type RootState = ReturnType<typeof reducers>;

@@ -2,16 +2,23 @@ import React, { useEffect } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import { MdDelete } from 'react-icons/md';
-import * as S from './ScheduleListModalStyle';
+import * as S from 'components/ScheduleListModal/ScheduleListModalStyle';
 import { useSelector, useDispatch } from 'react-redux';
-import { removeSchedules } from '../../store/schedules';
+import { removeSchedules } from 'store/schedules';
+import { RootState } from 'store/store';
+
+interface Props {
+  schuleListModal: boolean;
+  setScheduleListModal: React.Dispatch<React.SetStateAction<boolean>>;
+  selected: Date;
+}
 
 function ScheduleListModal({
   schuleListModal,
   setScheduleListModal,
   selected,
-}) {
-  const schedules = useSelector((state) => state.schedules);
+}: Props) {
+  const schedules = useSelector((state: RootState) => state.schedules);
   const dispatch = useDispatch();
 
   const selectedDate = `${selected.getFullYear()}-${
@@ -26,8 +33,10 @@ function ScheduleListModal({
     setScheduleListModal(false);
   };
 
-  const scheduleRemove = (e) => {
-    dispatch(removeSchedules(e.target.dataset.id));
+  const scheduleRemove = (
+    e: React.MouseEvent<HTMLButtonElement | SVGElement>,
+  ) => {
+    dispatch(removeSchedules(e.currentTarget.dataset.id));
   };
 
   useEffect(() => {

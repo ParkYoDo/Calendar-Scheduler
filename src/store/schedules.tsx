@@ -1,8 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { scheduleInterface } from 'type/interface';
+
+const initialState: scheduleInterface[] = [];
 
 const schedules = createSlice({
   name: 'schedules',
-  initialState: [],
+  initialState,
   reducers: {
     addSchedules(state, action) {
       return [...state, { ...action.payload }];
@@ -14,7 +17,7 @@ const schedules = createSlice({
     },
     sortSchedules(state) {
       return state.sort(function (a, b) {
-        return new Date(a.date) - new Date(b.date);
+        return Number(new Date(a.date)) - Number(new Date(b.date));
       });
     },
   },

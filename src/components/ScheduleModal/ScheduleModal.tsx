@@ -1,18 +1,26 @@
 import React, { useEffect } from 'react';
-import * as S from './ScheduleModalStyle';
+import * as S from 'components/ScheduleModal/ScheduleModalStyle';
 import { MdDelete } from 'react-icons/md';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import { useSelector, useDispatch } from 'react-redux';
-import { removeSchedules } from '../../store/schedules';
+import { removeSchedules } from 'store/schedules';
+import { RootState } from 'store/store';
+
+interface Props {
+  scheduleModal: boolean;
+  setScheduleModal: React.Dispatch<React.SetStateAction<boolean>>;
+  setRegisterModal: React.Dispatch<React.SetStateAction<boolean>>;
+  selected: Date;
+}
 
 function ScheduleModal({
   scheduleModal,
   setScheduleModal,
   setRegisterModal,
   selected,
-}) {
-  const schedules = useSelector((state) => state.schedules);
+}: Props) {
+  const schedules = useSelector((state: RootState) => state.schedules);
   const dispatch = useDispatch();
 
   const scheduleModalClose = () => {
@@ -32,8 +40,8 @@ function ScheduleModal({
     scheduleModalClose();
   };
 
-  const scheduleRemove = (e) => {
-    dispatch(removeSchedules(e.target.dataset.id));
+  const scheduleRemove = (e: React.MouseEvent<HTMLDivElement | SVGElement>) => {
+    dispatch(removeSchedules(e.currentTarget.dataset.id));
   };
 
   useEffect(() => {
