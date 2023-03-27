@@ -6,4 +6,5 @@ export const RegisterInput = styled.input`
   width: 100%;
   outline: none;
   padding: 16px;
+  border-radius: 4px;
 `;

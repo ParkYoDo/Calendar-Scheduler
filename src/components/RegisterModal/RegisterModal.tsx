@@ -52,10 +52,14 @@ function RegisterModal({
   };
 
   const onSubmit = () => {
-    dispatch(addSchedules({ id: scheduleId.current, ...input }));
-    scheduleId.current += 1;
-    registerModalClose();
-    setScheduleModal(true);
+    if (content) {
+      dispatch(addSchedules({ id: scheduleId.current, ...input }));
+      scheduleId.current += 1;
+      registerModalClose();
+      setScheduleModal(true);
+    } else {
+      alert('일정을 입력하세요');
+    }
   };
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import { MdDelete } from 'react-icons/md';
@@ -29,9 +29,9 @@ function ScheduleListModal({
     selected.getDate() >= 10 ? selected.getDate() : '0' + selected.getDate()
   }`;
 
-  const schuleListModalClose = () => {
+  const schuleListModalClose = useCallback(() => {
     setScheduleListModal(false);
-  };
+  }, [setScheduleListModal]);
 
   const scheduleRemove = (
     e: React.MouseEvent<HTMLButtonElement | SVGElement>,
@@ -42,7 +42,7 @@ function ScheduleListModal({
   useEffect(() => {
     schedules.filter((schedule) => schedule.date === selectedDate).length ===
       0 && schuleListModalClose();
-  });
+  }, [schedules, schuleListModalClose, selectedDate]);
 
   return (
     <>

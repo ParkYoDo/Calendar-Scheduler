@@ -4,13 +4,11 @@ import RegisterModal from 'components/RegisterModal/RegisterModal';
 import ScheduleListModal from 'components/ScheduleListModal/ScheduleListModal';
 import * as S from 'components/Calendar/CalendarStyle';
 import Badge from 'react-bootstrap/Badge';
-import { useSelector, useDispatch } from 'react-redux';
-import { sortSchedules } from 'store/schedules';
+import { useSelector } from 'react-redux';
 import { RootState } from 'store/store';
 
 function Calendar() {
   const schedules = useSelector((state: RootState) => state.schedules);
-  const dispatch = useDispatch();
 
   const [selected, setSelected] = useState(new Date());
 
@@ -143,11 +141,10 @@ function Calendar() {
   };
 
   const scheduleListModalOpen = () => {
-    if (schedules.length === 0) {
-      alert('Registered schedule does not exist');
-    } else {
-      dispatch(sortSchedules());
+    if (schedules.length) {
       setScheduleListModal(true);
+    } else {
+      alert('Registered schedule does not exist');
     }
   };
 
