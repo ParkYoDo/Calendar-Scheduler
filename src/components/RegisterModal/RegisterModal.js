@@ -67,6 +67,7 @@ function RegisterModal({
               <Form.Control
                 name="date"
                 type="date"
+                disabled
                 value={selectedDate}
                 onChange={onChange}
               />

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { GlobalStyle } from './globalstyle/globalStyle';
+import { GlobalStyle } from './GlobalStyle/GlobalStyle';
 import { Provider } from 'react-redux';
 import store from './store/store';
 import { PersistGate } from 'redux-persist/integration/react';

@@ -143,8 +143,7 @@ function Calendar() {
 
   const scheduleListModalOpen = (e) => {
     if (schedules.length === 0) {
-      alert('Registered schedule does not exist!');
-      e.preventDefault();
+      alert('Registered schedule does not exist');
     } else {
       dispatch(sortSchedules());
       setScheduleListModal(true);
@@ -173,7 +172,7 @@ function Calendar() {
       <S.CalendarBlock>
         <S.Header>
           <S.ScheduleListBtn onClick={scheduleListModalOpen}>
-            📅 Schedule <Badge bg="secondary badge">{schedules.length}</Badge>
+            📅 Schedule
           </S.ScheduleListBtn>
           <S.YearMonth>
             {year}년 {month + 1}월
