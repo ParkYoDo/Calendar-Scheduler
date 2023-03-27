@@ -27,9 +27,9 @@ function RegisterModal({
   const selectedDate = `${selected.getFullYear()}-${
     selected.getMonth() >= 9
       ? selected.getMonth() + 1
-      : '0' + (selected.getMonth() + 1)
+      : `0${selected.getMonth() + 1}`
   }-${
-    selected.getDate() >= 10 ? selected.getDate() : '0' + selected.getDate()
+    selected.getDate() >= 10 ? selected.getDate() : `0${selected.getDate()}`
   }`;
 
   const [input, setInput] = useState({
@@ -67,44 +67,39 @@ function RegisterModal({
   };
 
   return (
-    <>
-      <Modal show={registerModal} onHide={registerModalClose} centered>
-        <Modal.Header closeButton>
-          <Modal.Title>Shedule Calendar</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-              <S.RegisterTitle>Selected Date</S.RegisterTitle>
-              <Form.Control type="date" disabled value={selectedDate} />
-            </Form.Group>
-            <Form.Group
-              className="mb-3"
-              controlId="exampleForm.ControlTextarea1"
-            >
-              <S.RegisterTitle>Enter Schedule</S.RegisterTitle>
-              <S.RegisterInput
-                name="content"
-                value={content}
-                onChange={onChange}
-                as="textarea"
-                rows={3}
-                autoFocus
-                onKeyDown={onKeyDown}
-              />
-            </Form.Group>
-          </Form>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="primary" onClick={onSubmit}>
-            Save changes
-          </Button>
-          <Button variant="secondary" onClick={registerModalClose}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
-    </>
+    <Modal show={registerModal} onHide={registerModalClose} centered>
+      <Modal.Header closeButton>
+        <Modal.Title>Shedule Calendar</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+            <S.RegisterTitle>Selected Date</S.RegisterTitle>
+            <Form.Control type="date" disabled value={selectedDate} />
+          </Form.Group>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+            <S.RegisterTitle>Enter Schedule</S.RegisterTitle>
+            <S.RegisterInput
+              name="content"
+              value={content}
+              onChange={onChange}
+              as="textarea"
+              rows={3}
+              autoFocus
+              onKeyDown={onKeyDown}
+            />
+          </Form.Group>
+        </Form>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="primary" onClick={onSubmit}>
+          Save changes
+        </Button>
+        <Button variant="secondary" onClick={registerModalClose}>
+          Close
+        </Button>
+      </Modal.Footer>
+    </Modal>
   );
 }
 

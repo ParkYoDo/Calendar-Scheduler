@@ -8,13 +8,13 @@ const schedules = createSlice({
   initialState,
   reducers: {
     addSchedules(state, action) {
-      return [...state, { ...action.payload }].sort(function (a, b) {
+      return [...state, { ...action.payload }].sort((a, b) => {
         return Number(new Date(a.date)) - Number(new Date(b.date));
       });
     },
     removeSchedules(state, action) {
       return state.filter(
-        (schedule) => schedule.id !== parseInt(action.payload),
+        (schedule) => schedule.id !== Math.floor(action.payload),
       );
     },
   },

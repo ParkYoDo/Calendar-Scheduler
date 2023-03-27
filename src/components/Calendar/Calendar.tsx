@@ -22,8 +22,8 @@ function Calendar() {
   });
   const { year, month } = calendar;
 
-  const prevLast = new Date(year, month, 0); //11월 마지막 일
-  const thisLast = new Date(year, month + 1, 0); //12월 마지막 일
+  const prevLast = new Date(year, month, 0); // 11월 마지막 일
+  const thisLast = new Date(year, month + 1, 0); // 12월 마지막 일
 
   const plDate = prevLast.getDate(); // 11월 마지막 일
   const plDay = prevLast.getDay(); // 11월 마지막 요일
@@ -99,15 +99,15 @@ function Calendar() {
     const scheduleNum = schedules.filter(
       (schedule) =>
         schedule.date ===
-        `${year}-${month >= 9 ? month + 1 : '0' + (month + 1)}-${
-          date >= 10 ? date : '0' + date
+        `${year}-${month >= 9 ? month + 1 : `0${month + 1}`}-${
+          date >= 10 ? date : `0${date}`
         }`,
     ).length;
 
     return (
       <S.Date
         key={date}
-        onClick={(e) => {
+        onClick={() => {
           setSelected(new Date(year, month, date));
           scheduleNum ? scheduleModalOpen() : registerModalOpen();
         }}
