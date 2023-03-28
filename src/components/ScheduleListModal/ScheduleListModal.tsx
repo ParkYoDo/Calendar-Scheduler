@@ -40,8 +40,7 @@ function ScheduleListModal({
   };
 
   useEffect(() => {
-    schedules.filter((schedule) => schedule.date === selectedDate).length ===
-      0 && schuleListModalClose();
+    !schedules.length && schuleListModalClose();
   }, [schedules, schuleListModalClose, selectedDate]);
 
   return (

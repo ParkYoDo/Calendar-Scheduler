@@ -2,7 +2,6 @@ import React, { useRef, useState } from 'react';
 import * as S from 'components/RegisterModal/RegisterModalStyle';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
 import { useDispatch, useSelector } from 'react-redux';
 import { addSchedules } from 'store/schedules';
 import { RootState } from 'store/store';
@@ -42,7 +41,7 @@ function RegisterModal({
     setRegisterModal(false);
     setInput({
       date: '',
-      content: ``,
+      content: '',
     });
   };
 
@@ -51,19 +50,25 @@ function RegisterModal({
     setInput({ date: selectedDate, content: value });
   };
 
-  const onSubmit = () => {
-    if (content) {
+  const onSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!content) {
+      alert('일정을 입력하세요');
+    } else {
       dispatch(addSchedules({ id: scheduleId.current, ...input }));
       scheduleId.current += 1;
       registerModalClose();
       setScheduleModal(true);
-    } else {
-      alert('일정을 입력하세요');
     }
   };
 
-  const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    e.key === 'Enter' && onSubmit();
+  const onKeyDown = (
+    e:
+      | React.KeyboardEvent<HTMLTextAreaElement>
+      | React.MouseEvent<HTMLFormElement>,
+  ) => {
+    (e as React.KeyboardEvent<HTMLTextAreaElement>).key === 'Enter' &&
+      onSubmit(e as React.MouseEvent<HTMLFormElement>);
   };
 
   return (
@@ -71,34 +76,34 @@ function RegisterModal({
       <Modal.Header closeButton>
         <Modal.Title>Shedule Calendar</Modal.Title>
       </Modal.Header>
-      <Modal.Body>
-        <Form>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            <S.RegisterTitle>Selected Date</S.RegisterTitle>
-            <Form.Control type="date" disabled value={selectedDate} />
-          </Form.Group>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-            <S.RegisterTitle>Enter Schedule</S.RegisterTitle>
-            <S.RegisterInput
-              name="content"
-              value={content}
-              onChange={onChange}
-              as="textarea"
-              rows={3}
-              autoFocus
-              onKeyDown={onKeyDown}
-            />
-          </Form.Group>
-        </Form>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="primary" onClick={onSubmit}>
-          Save changes
-        </Button>
-        <Button variant="secondary" onClick={registerModalClose}>
-          Close
-        </Button>
-      </Modal.Footer>
+      <S.RegisterForm onSubmit={onSubmit}>
+        <Modal.Body>
+          <S.RegisterTitle>Selected Date</S.RegisterTitle>
+          <S.RegisterDate type="date" disabled value={selectedDate} />
+          <S.RegisterTitle>Enter Schedule</S.RegisterTitle>
+          <S.RegisterInput
+            name="content"
+            value={content}
+            onChange={onChange}
+            as="textarea"
+            rows={3}
+            autoFocus
+            onKeyDown={onKeyDown}
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button type="submit" variant="primary">
+            Save changes
+          </Button>
+          <Button
+            type="button"
+            variant="secondary"
+            onClick={registerModalClose}
+          >
+            Close
+          </Button>
+        </Modal.Footer>
+      </S.RegisterForm>
     </Modal>
   );
 }
