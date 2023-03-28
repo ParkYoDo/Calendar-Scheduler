@@ -82,7 +82,7 @@
 - 달력의 연,월을 변경
 - 해당하는 달은 진한색, 명월과 익월은 흐린색으로 표시
 
-### 3. Create Schedule
+### 3. Register Schedule
 
 <img width="100%" src="https://user-images.githubusercontent.com/31908501/228332808-4b45b39a-49b6-491d-bd49-79f16deec056.gif"/>
 
